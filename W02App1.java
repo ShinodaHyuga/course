@@ -1,4 +1,4 @@
-package es.exsample;
+package hoge;
 
 import android.os.*;
 import android.view.*;
