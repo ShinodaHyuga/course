@@ -11,3 +11,8 @@
 
 - `confusion_matrix.py`
   - 混合行列の計算
+
+## 課題12
+
+- `least_squares_method.py`
+  - 最小二乗法の計算
