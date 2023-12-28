@@ -15,8 +15,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ExSample extends AppCompatActivity {
+public class ToDoApp extends AppCompatActivity {
 
+    // UIコンポーネントの宣言
     private EditText usernameEditText, todoEditText;
     private Button addTodoButton, showTodosButton, deleteTodoButton;
     private ListView todoListView;
@@ -49,9 +50,6 @@ public class ExSample extends AppCompatActivity {
         String dbPath = "data/data/" + getPackageName() + "/ToDoApp.db";
         db = SQLiteDatabase.openOrCreateDatabase(dbPath, null);
         createTables();
-
-        // 既存のデータベースを削除する場合
-        // this.deleteDatabase(dbPath);
 
         // ToDoアイテムのリスト用のアダプターを初期化
         todoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice);
@@ -99,6 +97,7 @@ public class ExSample extends AppCompatActivity {
         });
     }
 
+    // データベースのテーブル作成メソッド
     private void createTables() {
         // ユーザテーブルの作成
         db.execSQL("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT)");
@@ -107,6 +106,7 @@ public class ExSample extends AppCompatActivity {
         db.execSQL("CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, user_id INTEGER, todo TEXT)");
     }
 
+    // ToDoアイテムの追加メソッド
     private void addTodoItem() {
         String username = usernameEditText.getText().toString();
         String todoItem = todoEditText.getText().toString();
@@ -136,6 +136,7 @@ public class ExSample extends AppCompatActivity {
         todoEditText.setText("");
     }
 
+    // ユーザID取得メソッド
     private long getUserId(String username) {
         Cursor cursor = db.rawQuery("SELECT id FROM users WHERE username = ?", new String[]{username});
         try {
@@ -145,7 +146,7 @@ public class ExSample extends AppCompatActivity {
                     return cursor.getLong(columnIndex);
                 } else {
                     // カラムが存在しない場合のエラーハンドリング
-                    return -1; // あるいは例外をスローするなど、適切なエラーハンドリングを行う
+                    return -1;
                 }
             }
             return -1;
@@ -154,6 +155,7 @@ public class ExSample extends AppCompatActivity {
         }
     }
 
+    // ユーザ追加メソッド
     private long addUser(String username) {
         ContentValues values = new ContentValues();
         values.put("username", username);
@@ -161,6 +163,7 @@ public class ExSample extends AppCompatActivity {
         return db.insert("users", null, values);
     }
 
+    // ToDoアイテムの削除メソッド
     private void deleteSelectedTodoItem() {
         String username = usernameEditText.getText().toString();
         String selectedTodo = todoEditText.getText().toString();
@@ -186,6 +189,7 @@ public class ExSample extends AppCompatActivity {
         todoEditText.setText("");
     }
 
+    // ToDoアイテム表示メソッド
     private void showTodoItems() {
         String username = usernameEditText.getText().toString();
         long userId = getUserId(username);
