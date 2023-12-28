@@ -1,5 +1,6 @@
 package es.exsample;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -188,7 +189,7 @@ public class ToDoApp extends AppCompatActivity {
         // 入力フィールドのクリア
         todoEditText.setText("");
     }
-
+    // ToDoアイテム表示メソッド
     // ToDoアイテム表示メソッド
     private void showTodoItems() {
         String username = usernameEditText.getText().toString();
@@ -205,8 +206,12 @@ public class ToDoApp extends AppCompatActivity {
         // 結果をListViewに表示
         todoAdapter.clear();
         while (cursor.moveToNext()) {
-            String todoItem = cursor.getString(cursor.getColumnIndex("todo"));
-            todoAdapter.add(todoItem);
+            @SuppressLint("Range") String todoItem = cursor.getString(cursor.getColumnIndex("todo"));
+
+            // Check if the todo item is not empty before adding to the adapter
+            if (!TextUtils.isEmpty(todoItem.trim())) {
+                todoAdapter.add(todoItem);
+            }
         }
 
         // ToDoアイテムが存在しない場合はEditTextとDeleteボタンを非表示にする
@@ -218,4 +223,6 @@ public class ToDoApp extends AppCompatActivity {
             deleteTodoButton.setVisibility(View.VISIBLE);
         }
     }
+
+
 }
