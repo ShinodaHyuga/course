@@ -138,10 +138,20 @@ public class ExSample extends AppCompatActivity {
 
     private long getUserId(String username) {
         Cursor cursor = db.rawQuery("SELECT id FROM users WHERE username = ?", new String[]{username});
-        if (cursor.moveToFirst()) {
-            return cursor.getLong(cursor.getColumnIndex("id"));
+        try {
+            if (cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndex("id");
+                if (columnIndex >= 0) {
+                    return cursor.getLong(columnIndex);
+                } else {
+                    // カラムが存在しない場合のエラーハンドリング
+                    return -1; // あるいは例外をスローするなど、適切なエラーハンドリングを行う
+                }
+            }
+            return -1;
+        } finally {
+            cursor.close(); // 必ずカーソルを閉じる
         }
-        return -1;
     }
 
     private long addUser(String username) {
